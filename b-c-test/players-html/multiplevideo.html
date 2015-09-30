@@ -23,6 +23,7 @@
     	background-color: #ccc !important;
 
     }
+    .vjs-big-play-button{display: none;}
   </style>
 </head>
 
@@ -52,7 +53,7 @@ html.push('<h1>'+video.videos[vids].title+'</h1>');
 html.push('<p>'+video.videos[vids].author+' | '+video.videos[vids].date+' </p>');
 html.push('<p>-- "'+video.videos[vids].comments+'" </p>');
 html.push('<video id="'+video.videos[vids].ID+'" data-account="4468173350001" data-player="12d99739-9e51-4fd5-a770-4574ef390cf7"	data-embed="default" data-video-id="'+video.videos[vids].ID+'" class="video-js" controls></video>');
-html.push('<ul class="links"><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].play();">Play | </a></li><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].stop();">Stop | </a></li><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].pause();">Pause </a></li><div style="clear:both;"></div></ul>');
+html.push('<ul class="links"><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].playit();">Play | </a></li><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].stop();">Stop | </a></li><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].pause();">Pause </a></li><div style="clear:both;"></div></ul>');
 
 
 
@@ -76,7 +77,8 @@ document.addEventListener("DOMContentLoaded", function(e) {
 	    // get a reference to the player
 	    
 	    myPlayer['vid'+video.videos[vids].ID] = this;
-	    //myPlayer.width('100%'); 
+	    myPlayer['vid'+video.videos[vids].ID].width('600px'); 
+	    myPlayer['vid'+video.videos[vids].ID].height('400px'); 
 	   
 	    // initialize the ima3 plugin that was registered in ima3.min.js with custom options
 	    myPlayer['vid'+video.videos[vids].ID].ima3({
@@ -116,7 +118,14 @@ document.addEventListener("DOMContentLoaded", function(e) {
 			
 		}
 
+		myPlayer['vid'+video.videos[vids].ID].playit=function(){
+			for (var key in myPlayer) {
+    	myPlayer[key].stop();
+   				 
+			}
 
+			this.play();
+		}
 		
 
 		
