@@ -29,6 +29,18 @@ try {
 
 
 try {
+  $folder_id = '5602698ae4b0dac7c5a6bdba';
+  $video_id = '4535246700001';
+  $folder_add = $bc->add_video_to_folder($access_token, 'PUT', $folder_id, $video_id);
+} catch(Exception $error) {
+  echo '<pre>';
+  print_r($error);
+  echo '</pre>';
+  exit;
+}
+
+
+try {
   $folder_list = $bc->get_folder_list($access_token);
 } catch(Exception $error) {
   echo '<pre>';
@@ -52,7 +64,7 @@ foreach ($folders as $key => $value) {
 		  $videos = json_decode($video_list, TRUE);
 		  foreach ($videos as $k => $v) {
 		  	echo 'Name : '.$v['name'].'<br>';
-		  	echo 'ID : '.$v['name'].'<br><br>';
+		  	echo 'ID : '.$v['id'].'<br><br>';
 		  }
 		  echo '--------------------------------------<br>';
 		} catch(Exception $error) {

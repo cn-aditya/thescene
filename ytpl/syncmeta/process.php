@@ -10,6 +10,9 @@ if(isset($_POST['submit'])){
 
 	$playlistName = (isset($_POST['list_name'])) ? $_POST['list_name'] : $rand;
 	$rawplaylistName = (isset($_POST['list_name'])) ? $_POST['list_name'] : $rand;
+	$folder_id = (isset($_POST['folder_id'])) ? $_POST['folder_id'] : '5602698ae4b0dac7c5a6bdba';
+	$folder_name = (isset($_POST['folder_name'])) ? $_POST['folder_name'] : 'test';
+	$list_id = (isset($_POST['list_id'])) ? $_POST['list_id'] : '0';
 
 
 	$basePath = '/var/www/html/ts/local/ytpl/';
@@ -71,7 +74,7 @@ if(isset($_POST['submit'])){
 
 	$videoDirUrl = 'http://localhost/ts/local/ytpl/files/' . $subDir . '/';
 
-	$bc = new BCMAPI($API_READ_TOKEN, $API_WRITE_TOKEN);
+	$bc = new BCMAPI($API_READ_TOKEN, $API_WRITE_TOKEN, $CLIENT_ID, $CLIENT_SECRET, $ACCOUNT_ID);
 
 
 	$refVideoId = array();
@@ -93,9 +96,9 @@ if(isset($_POST['submit'])){
 			    } else {
 			      $video = $listResponse[0];
 
-			      //echo '<pre>';
-			      //print_r($video);
-			      //echo '</pre>';
+			      echo '<pre>';
+			      print_r($video);
+			      echo '</pre>';
 			     
 			  	}
 			} catch (Google_Service_Exception $e) {
@@ -110,7 +113,7 @@ if(isset($_POST['submit'])){
 	 
 			$params->name = preg_replace('/[^A-Za-z0-9 _\.]/','',str_replace('_', ' ', $name));
 			$params->referenceId = $key;
-			$params->shortDescription = ($video->snippet['description'] != '') ? preg_replace('/[\x00-\x1F\x80-\xFF]/', '', substr(substr($video->snippet['description'],0,strpos($video->snippet['description'],'.')),0,240)) : substr($val,240);
+			$params->shortDescription = ($video->snippet['description'] != '') ? substr($video->snippet['description'],0,230) : substr($val,0,240);
 			$params->longDescription = ($video->snippet['description'] != '') ? preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $video->snippet['description']) : $val;
 			$params->startDate = strtotime($video->snippet['publishedAt']);
 			$params->endDate = null;
@@ -129,7 +132,7 @@ if(isset($_POST['submit'])){
 			$params->renditions[0]->videoContainer = 'MP4';
 			$params->renditions[0]->size = '1024';
 
-			//echo '<pre>';print_r($params);echo '</pre>';
+			echo '<pre>';print_r($params);echo '</pre>';
 
 			
 
@@ -143,13 +146,14 @@ if(isset($_POST['submit'])){
 			  //$refVideoId[] = $id;
 			} catch(Exception $error) {
 			  // Handle our error
-			  //echo '<pre>';
-			  //print_r($error);
-			  //echo '</pre>';
+			  echo '<pre>';
+			  print_r($error);
+			  echo '</pre>';
 				$refErrorvideoKeyYT[] = $key;
 			  //die();
 			}
-			
+
+
 
 		}
 	}
@@ -181,9 +185,9 @@ echo $htmlBody;
 	  } catch(Exception $error) {
 	  	echo 'Unable to create playlist.';
 	    // Handle our error
-	    //echo '<pre>';
-	    //echo $error;
-	    //echo '</pre>';
+	    echo '<pre>';
+	    echo $error;
+	    echo '</pre>';
 	    //die();
 	  }
 
@@ -191,11 +195,56 @@ echo $htmlBody;
 	  $playlistDetailsFinal->success_YT_video_ids = $refVideoIdArr;
 	  $playlistDetailsFinal->error_YT_video_ids = $refErrorvideoKeyYT;
 
+
+	/*$bc->__set('secure',TRUE);
+
+	try {
+	  $access_token = $bc->get_access_token();
+	  //echo '<pre>';
+	  //print_r($access_token);
+	  //echo '</pre>';
+	} catch(Exception $error) {
+	  echo '<pre>';
+	  print_r($error);
+	  echo '</pre>';
+	}
+
+	foreach ($refVideoIdArr as $fkey => $fvalue) {
+		try {
+		  $folder_id = $folder_id;
+		  $video_id = $fvalue;
+		  $folder_add = $bc->add_video_to_folder($access_token, 'PUT', $folder_id, $video_id);
+		} catch(Exception $error) {
+		  echo '<pre>';
+		  print_r($error);
+		  echo '</pre>';
+		}
+	}*/
+
+			
+			
+
 	echo '<pre>';
 	print_r($playlistDetailsFinal);
 	echo '</pre>';
 
 
-	
+	$link = new mysqli($host_name, $user, $password, $db_name);
+
+	/* check connection */
+	if ($link->connect_errno) {
+	    printf("Connect failed: %s\n", $link->connect_error);
+	    exit();
+	}
+
+	foreach ($refVideoIdArr as $skey => $svalue) {
+		$qry = "INSERT INTO ts_yt_bc_sync_ref_ids SET yt_id = '{$skey}' , bc_id = '{$svalue}' , failed_yt_id = '0', folder = '{$folder_name}', yt_pl_id = '{$list_id}' ";
+		$link->query($qry);
+	}
+
+	foreach ($refErrorvideoKeyYT as $vfkey => $vfvalue) {
+		$qry = "INSERT INTO ts_yt_bc_sync_ref_ids SET yt_id = '0' , bc_id = '0' , failed_yt_id = '{$vfvalue}', folder = '{$folder_name}', yt_pl_id = '{$list_id}'  ";
+		$link->query($qry);
+	}
 
 }

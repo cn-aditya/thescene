@@ -27,6 +27,18 @@ if ($client->getAccessToken()) {
   <input type="text" name="list_name" value="" required>
 </p>
 <p>
+  <label>Play List ID</label>
+  <input type="text" name="list_id" value="" required>
+</p>
+<p>
+  <label>Assigned Folder Name</label>
+  <input type="text" name="folder_name" value="" required>
+</p>
+<!--<p>
+  <label>Assigned Folder ID</label>
+  <input type="text" name="folder_id" value="" required>
+</p>-->
+<p>
   <label>Action</label>
   <input type="submit" name="submit">
 </p>

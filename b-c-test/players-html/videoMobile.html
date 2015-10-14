@@ -23,48 +23,66 @@
     	background-color: #ccc !important;
 
     }
+    .vjs-social-overlay{background-color: #ff0000;}
+    .vjs-big-play-button{display: none;}
   </style>
 </head>
 
 <body>
 	<link href="//players.brightcove.net/videojs-ima3/videojs.ima3.min.css"
 		rel="stylesheet">
-<div style="margin-bottom:20px;">
-	<video id="player" data-account="4468173350001"
-		data-player="12d99739-9e51-4fd5-a770-4574ef390cf7"
-		data-embed="default" data-video-id="4475346748001" class="video-js" width="640" height="480" controls autoplay></video>
- </div>       
-        <ul class="links">
-            <li><a href="javascript:void(0);" onClick="myPlayer.play();">Play | </a></li> 
-            <li><a href="javascript:void(0);" onClick="myPlayer.stop();">Stop | </a></li>           
-            <li><a href="javascript:void(0);" onClick="myPlayer.pause();">Pause </a></li>
-            
-            <div style="clear:both;"></div>
-        </ul>
+
+<section id="videos">		
+ 
+ </section>     
+        
         
         <div id="showValues" style="background-color:#09F; font-weight:bold;"></div>
-        
-        
-	<script
-		src="//players.brightcove.net/4468173350001/12d99739-9e51-4fd5-a770-4574ef390cf7_default/index.min.js"></script>
+      
 
-
-	<script src="//players.brightcove.net/videojs-ima3/videojs.ima3.min.js"></script>
-
-	<script type="text/javascript" src="videojs.analytic.omniture.js?r=45242424"></script>
-<script src="lib/videojs.ads.js"></script>
 	<script>
-	  videojs("player").ready(function() {
+ var jsonVideo = '{ "videos" :  [{ "ID":"4475346748001","title":"Bird video","author":"Avisek","date":"2015-09-28","comments":"Nice video.All should watch"  } ,{"ID":"4500434535001","title":"ECG video","author":"Aditya","date":"2015-09-28","comments":"All should watch"  } ] }'; 
+var video=JSON.parse(jsonVideo);
+
+//console.log(video)
+
+for (var vids  in video.videos) {
+	var html=[];
+ID='_'+video.videos[vids].ID;
+html.push('<div id="video_'+video.videos[vids].ID+'">');
+html.push('<h1>'+video.videos[vids].title+'</h1>');
+html.push('<p>'+video.videos[vids].author+' | '+video.videos[vids].date+' </p>');
+html.push('<p>-- "'+video.videos[vids].comments+'" </p>');
+html.push('<video id="'+video.videos[vids].ID+'" data-account="4468173350001" data-player="12d99739-9e51-4fd5-a770-4574ef390cf7"	data-embed="default" data-video-id="'+video.videos[vids].ID+'" class="video-js" controls></video>');
+html.push('<ul class="links"><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].playit();">Play | </a></li><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].stop();">Stop | </a></li><li><a href="javascript:void(0);" onClick="myPlayer[&quot;vid'+video.videos[vids].ID+'&quot;].pause();">Pause </a></li><div style="clear:both;"></div></ul>');
+
+
+
+html.push('</div>');
+var prevhtml=document.getElementById("videos").innerHTML;
+document.getElementById("videos").innerHTML=prevhtml+html.join('');
+
+
+
+
+
+
+}
+
+
+var myPlayer = {};
+document.addEventListener("DOMContentLoaded", function(e) {
+var i=0;
+	for (var vids  in video.videos) {
+	videojs(video.videos[vids].ID).ready(function() {
 	    // get a reference to the player
-	    myPlayer = this;
-	     myPlayer.width('100%'); 
-	     //myPlayer.ads();
-	    // myPlayer.ads({
-  		//	timeout: 3000
-		//});
-		 //myPlayer.height(200); 
+	    
+	    myPlayer['vid'+video.videos[vids].ID] = this;
+	    myPlayer['vid'+video.videos[vids].ID].width('600px'); 
+	    myPlayer['vid'+video.videos[vids].ID].height('400px'); 
+	   
 	    // initialize the ima3 plugin that was registered in ima3.min.js with custom options
-	    myPlayer.ima3({
+	    myPlayer['vid'+video.videos[vids].ID].ima3({
 			prerollTimeout: 1000,
 			loadingSpinner:true,
 			adTechOrder: ["html5"],
@@ -72,66 +90,74 @@
 			serverUrl: 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/5574/in.n5574.gq/GQVideo&ciu_szs&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]'
 			
 	    });
-	    myPlayer.omniturePlugin({
+	    myPlayer['vid'+video.videos[vids].ID].omniturePlugin({
 			  abc: "123"
 		});
 
-var currentsource;
 
-
-setTimeout(function(){ 
-	currentsource=myPlayer.currentSrc(); 
-
-
-}, 1000);
-
-
-
-
-
-
-		
-//player.ads.contentSrc = 'movie-high.mp4';
-
-// then, modify the src attribute as usual
-//player.src('movie-high.mp4');
-
-
-
-		myPlayer.mute=function(){
-			var isVolumeMuted = myPlayer.muted();
+		myPlayer['vid'+video.videos[vids].ID].mute=function(){
+			var isVolumeMuted = this.muted();
 			if(!isVolumeMuted){
-			myPlayer.muted(true);
+			this.muted(true);
 			document.getElementById('sound').innerHTML='Unmute | ';
 			}else{
-			myPlayer.muted(false);
+			this.muted(false);
 			document.getElementById('sound').innerHTML='Mute | ';
 			}
 		}
 		
-		myPlayer.showcurrenttime=function(){
-			var currentTime=myPlayer.currentTime();
+		myPlayer['vid'+video.videos[vids].ID].showcurrenttime=function(){
+			var currentTime=this.currentTime();
 			document.getElementById('showValues').innerHTML=currentTime;
 			
 			
 		}
 
-		myPlayer.stop=function(){
-			myPlayer.pause();
-			myPlayer.currentTime(0);
+		myPlayer['vid'+video.videos[vids].ID].stop=function(){
+			this.pause();
+			this.currentTime(0);
 			
 		}
 
+		myPlayer['vid'+video.videos[vids].ID].playit=function(){
+			for (var key in myPlayer) {
+    			myPlayer[key].stop();
+   				 
+			}
 
+			this.play();
+		}
 		
 
 		
 	  });
+
+
+		console.log(i)
+		if(i==0){
+			
+			myPlayer['vid'+video.videos[vids].ID].play();
+			myPlayer['vid'+video.videos[vids].ID].muted(true);
+		}
+i++;
+	}
+	
+});
+
+
+
+
+	  
 	  
 		
 	  
 </script>
-
+<script
+		src="//players.brightcove.net/4468173350001/12d99739-9e51-4fd5-a770-4574ef390cf7_default/index.min.js"></script>
+		<script src="//players.brightcove.net/videojs-ima3/videojs.ima3.min.js"></script>
+  
+     
+	<script type="text/javascript" src="videojs.analytic.omniture.js?r=45242424"></script>
 </body>
 
 </html>

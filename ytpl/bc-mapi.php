@@ -1621,6 +1621,38 @@ class BCMAPI
 		return $access_token;
 	}
 
+	public function add_video_to_folder($access_token, $method = 'PUT', $folder_id  = NULL, $video_id = NULL, $data = NULL){
+		$end_point = "folders/{$folder_id}/videos/{$video_id}";
+		$request = "{$this->getUrl('request')}/{$this->account_id}/{$end_point}";
+
+		if ($data) {
+			$data = json_decode($data);
+		} else {
+			$data = array();
+		}
+
+		$ch = curl_init($request);
+		curl_setopt_array($ch, array(
+				CURLOPT_CUSTOMREQUEST  => $method,
+				CURLOPT_RETURNTRANSFER => TRUE,
+				CURLOPT_SSL_VERIFYPEER => FALSE,
+				CURLOPT_HTTPHEADER     => array(
+					'Content-type: application/json',
+					"Authorization: Bearer {$access_token}",
+				),
+				CURLOPT_POSTFIELDS => json_encode($data)
+			));
+		$response = curl_exec($ch); 
+		curl_close($ch);
+		// Check for errors
+		if ($response === FALSE) {
+			echo "Error: "+$response;
+			//die(curl_error($ch));
+		}
+
+		return $response;
+	}
+
 	public function get_folder_list($access_token, $method = 'GET', $type = 'folders',$folder_id  = NULL, $data = NULL){
 		switch($type){
 			case 'folders' :

@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(0);
 require_once realpath(dirname(__FILE__) . '/../src/Google/autoload.php');
 require('../bc-mapi.php');
 session_start();
@@ -9,6 +9,14 @@ $OAUTH2_CLIENT_SECRET = 'mxb47Qi__S9QRvUWiIbS1o6t';
 
 $API_READ_TOKEN='ica_Q91p0c-BoCFcCt0M58RLP_YD5vyuSf_qiIhagXKM36A7dzegnQ..';
 $API_WRITE_TOKEN= '3w6N6ouRt39sFKgIBOTw98DQjwEgmD6c9RsvSbiSbESiZjiDHHzJXw..';
+$CLIENT_ID     = '915aacea-2c2c-4135-9148-de5580f7388a';
+$CLIENT_SECRET = 'H06Ba8MOdID1DpZM7rq1s_0ETv2XrTK82c2mZw8TO7P3mrR7cPyc8MqYrvi47ujWviKim57sq3ayNbD9FmizbA';
+$ACCOUNT_ID= '4468173350001';
+
+$host_name = 'localhost';
+$user = 'root';
+$password = '123';
+$db_name = 'thescene';
 
 
 

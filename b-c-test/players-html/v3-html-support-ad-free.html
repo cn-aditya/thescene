@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>Brightcove - Omniture analytics plugin test page</title>
+  <script src="lib/VisitorAPI.js"></script>
+  <script src="lib/AppMeasurement_Module_Media.js"></script>
+  <script src="lib/AppMeasurement_Module_Integrate.js"></script>  
+  <script src="lib/AppMeasurement.js"></script>
+  <script src="lib/VideoHeartbeat.js"></script>
+  <script src="lib/AdobeAnalyticsPlugin.js"></script>
+  
+  <style>
+  .links{clear:both;}
+  .links li{float:left; padding:5px; list-style:none;}
+  .links li a{text-decoration:none; color:#C30;}
+  </style>
+</head>
+
+<body>
+	<link href="//players.brightcove.net/videojs-ima3/videojs.ima3.min.css"
+		rel="stylesheet">
+<div style="margin-bottom:20px;">
+	<video id="player" data-account="4468173350001"
+		data-player="12d99739-9e51-4fd5-a770-4574ef390cf7"
+		data-embed="default" data-video-id="4535785462001" class="video-js" width="640" height="480" controls autoplay></video>
+ </div>       
+        <ul class="links">
+            <li><a href="javascript:void(0);" onClick="myPlayer.play();">Play | </a></li> 
+            <li><a href="javascript:void(0);" onClick="myPlayer.stop();">Stop | </a></li>           
+            <li><a href="javascript:void(0);" onClick="myPlayer.pause();">Pause | </a></li>
+            <li><a href="javascript:void(0);" onClick="myPlayer.mute();" id="sound">Mute | </a></li>
+                        <li><a href="javascript:void(0);" onClick="myPlayer.showcurrenttime();">Current time on video | </a></li>
+            <li><a href="javascript:void(0);" onClick="myPlayer.currentTime(25);">Forward to 25 secs</a></li>
+            <div style="clear:both;"></div>
+        </ul>
+        
+        <div id="showValues" style="background-color:#09F; font-weight:bold;"></div>
+        
+        
+	<script
+		src="//players.brightcove.net/4468173350001/12d99739-9e51-4fd5-a770-4574ef390cf7_default/index.min.js"></script>
+
+
+	<script src="//players.brightcove.net/videojs-ima3/videojs.ima3.min.js"></script>
+
+	<script type="text/javascript" src="videojs.analytic.omniture.js?r=45242424"></script>
+<script src="lib/videojs.ads.js"></script>
+	<script>
+	  videojs("player").ready(function() {
+	    // get a reference to the player
+	    myPlayer = this;
+	     myPlayer.width('100%'); 
+	     //myPlayer.ads();
+	    // myPlayer.ads({
+  		//	timeout: 3000
+		//});
+		 //myPlayer.height(200); 
+	    // initialize the ima3 plugin that was registered in ima3.min.js with custom options
+	    /*myPlayer.ima3({
+			prerollTimeout: 1000,
+			loadingSpinner:true,
+			adTechOrder: ["html5"],
+			timeout: 2000,
+			serverUrl: 'https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/5574/in.n5574.gq/GQVideo&ciu_szs&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&url=[referrer_url]&description_url=[description_url]&correlator=[timestamp]'
+			
+	    });*/
+	    myPlayer.omniturePlugin({
+			  abc: "123"
+		});
+
+var currentsource;
+
+
+setTimeout(function(){ 
+	currentsource=myPlayer.currentSrc(); 
+
+
+}, 1000);
+
+
+
+
+
+
+		
+//player.ads.contentSrc = 'movie-high.mp4';
+
+// then, modify the src attribute as usual
+//player.src('movie-high.mp4');
+
+
+
+		myPlayer.mute=function(){
+			var isVolumeMuted = myPlayer.muted();
+			if(!isVolumeMuted){
+			myPlayer.muted(true);
+			document.getElementById('sound').innerHTML='Unmute | ';
+			}else{
+			myPlayer.muted(false);
+			document.getElementById('sound').innerHTML='Mute | ';
+			}
+		}
+		
+		myPlayer.showcurrenttime=function(){
+			var currentTime=myPlayer.currentTime();
+			document.getElementById('showValues').innerHTML=currentTime;
+			
+			
+		}
+
+		myPlayer.stop=function(){
+			myPlayer.pause();
+			myPlayer.currentTime(0);
+			
+		}
+
+
+		
+
+		
+	  });
+	  
+		
+	  
+</script>
+
+</body>
+
+</html>
