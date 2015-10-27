@@ -10,23 +10,33 @@
   <script src="lib/AppMeasurement.js"></script>
   <script src="lib/VideoHeartbeat.js"></script>
   <script src="lib/AdobeAnalyticsPlugin.js"></script>
-  
-  <style>
-   body{min-height: 1200px}
-  .links{clear:both;}
-  .links li{float:left; padding:5px; list-style:none;}
-  .links li a{text-decoration:none; color:#C30;}
-    .vjs-big-play-button {
-      background-color: #B37D5B!important;
-      opacity: .6;
-    }
-    .vjs-control-bar{
-    	background-color: #ccc !important;
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-    }
-    .vjs-social-overlay{background-color: #ff0000;}
-    .vjs-big-play-button{display: none;}
-  </style>
+
+
+<!-- Open Graph Sharing Metadata --> 
+<meta property="og:site_name" content=""/> 
+<meta property="og:title" content="96980657001_109379494001_Bird-CommonRedpoll-iStock-000006369683HD720.mp4"/> 
+<meta property="og:description" content=""/> 
+<meta property="og:url" content="http://scene.cnidigital.in/b-c-test/players-html/multipleannotation.html"/> 
+<meta property="og:image" content="http://brightcove.vo.llnwd.net/v1/unsecured/media/4468173350001/201509/2832/4468173350001_4475447441001_4475346748001-th.jpg?pubId=4468173350001&videoId=4475346748001"/> 
+<meta property="og:type" content="video"/> 
+<meta property="og:video:secure_url" content="https://scene.cnidigital.in/b-c-test/players-html/multipleannotation.html"/> 
+<meta property="og:video:type" content="application/x-shockwave-flash"/> 
+<meta property="og:video:width" content="640px"/> 
+<meta property="og:video:height" content="360px"/> 
+
+<!-- Twitter: card/meta-tags --> 
+<meta name="twitter:card" content="player"/> 
+<meta name="twitter:title" content="96980657001_109379494001_Bird-CommonRedpoll-iStock-000006369683HD720.mp4"/> 
+<meta name="twitter:description" content=""/> 
+<meta name="twitter:url" content="http://scene.cnidigital.in/b-c-test/players-html/multipleannotation.html"/> 
+<meta name="twitter:image" content="http://brightcove.vo.llnwd.net/v1/unsecured/media/4468173350001/201509/2832/4468173350001_4475447441001_4475346748001-th.jpg?pubId=4468173350001&videoId=4475346748001"/> 
+<meta name="twitter:player" content="https://players.brightcove.net/4468173350001/12d99739-9e51-4fd5-a770-4574ef390cf7_default/index.html?videoId=4475346748001"/> 
+<meta name="twitter:player:width" content="640px"/> 
+<meta name="twitter:player:height" content="360px"/>
+
+
 </head>
 
 <body>
@@ -40,8 +50,10 @@
         
         <div id="showValues" style="background-color:#09F; font-weight:bold;"></div>
 
-        <div id="linkedText" style="background-color:#09F; font-weight:bold;"></div>
+        <div id="linkedText"></div>
       
+
+
 
 	<script>
 	currentID='';
@@ -66,11 +78,6 @@ html.push('</div>');
 var prevhtml=document.getElementById("videos").innerHTML;
 document.getElementById("videos").innerHTML=prevhtml+html.join('');
 
-
-
-
-
-
 }
 
 
@@ -86,12 +93,12 @@ var i=0;
 	    
 	    myPlayer['vid'+video.videos[vids].ID] = this;
 	    myPlayer['vid'+video.videos[vids].ID].width('100%'); 
-	    myPlayer['vid'+video.videos[vids].ID].height('300px'); 
+	    myPlayer['vid'+video.videos[vids].ID].height('500px'); 
 	   var vId=video.videos[vids].ID;
 	    // initialize the ima3 plugin that was registered in ima3.min.js with custom options
-var cuePointAra=[];
-       var allCuePointData;
-      myPlayer['vid'+vId].catalog.getVideo(myPlayer['vid'+vId].options()['data-video-id'], function(error, video) {
+		var cuePointAra=[];
+       	var allCuePointData;
+      	myPlayer['vid'+vId].catalog.getVideo(myPlayer['vid'+vId].options()['data-video-id'], function(error, video) {
         //deal with error
         myPlayer['vid'+vId].catalog.load(video);
         cuePointAra = myPlayer['vid'+vId].mediainfo.cue_points;
@@ -150,7 +157,7 @@ var cuePointAra=[];
 			
 		}
 		
-
+		shareAppend();
 		
 	  });
 
@@ -165,9 +172,11 @@ i++;
 });
 
 
+function shareAppend(){
+	$('.vjs-share-options').before('<br>');
+}
 
-
-	     function getSubArray(targetArray, objProperty, value) {
+	    function getSubArray(targetArray, objProperty, value) {
         var i, totalItems = targetArray.length,
           objFound = false,
           idxArr = [];
@@ -181,8 +190,11 @@ i++;
       };
 	  
 		
-	  
+function onclickFromBrightcove(){
+      	document.getElementById('success').style.display='block';
+      }	  
 </script>
+
 <script
 		src="//players.brightcove.net/4468173350001/12d99739-9e51-4fd5-a770-4574ef390cf7_default/index.min.js"></script>
 		<script src="//players.brightcove.net/videojs-ima3/videojs.ima3.min.js"></script>
@@ -191,6 +203,7 @@ i++;
 	<script type="text/javascript" src="videojs.analytic.omniture.js?r=45242424"></script>
 
 
+ <link href="style.css" rel="stylesheet" type="text/css"> 
 
 </body>
 
